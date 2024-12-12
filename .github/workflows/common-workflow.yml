@@ -3,7 +3,7 @@ name: Common Workflow
 on:
   workflow_call:
     inputs:
-      account: # the variable you can use in place of a matrix
+      account:
         required: true
         type: string
       region:
@@ -14,26 +14,30 @@ permissions:
   issues: write
 
 jobs:
+  check-approval:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+
+    steps:
+      - name: Check Approval for Deployment
+        run: |
+          echo "Checking approval for Account: ${{ inputs.account }} and Region: ${{ inputs.region }}"
+          if ! echo "${{ vars.APPROVED_DEPLOYMENTS }}" | grep -q "${{ inputs.account }}:${{ inputs.region }}"; then
+            echo "Deployment to Account: ${{ inputs.account }} in Region: ${{ inputs.region }} is not approved."
+            exit 1
+          fi
+          echo "Deployment approved for Account: ${{ inputs.account }} in Region: ${{ inputs.region }}"
+
   terraform-deploy:
     runs-on: ubuntu-latest
+    needs: check-approval
 
     steps:
       - name: Plan TF
         run: |
           echo "Account: ${{ inputs.account }}"
           echo "Region: ${{ inputs.region }}"
-
-      - name: Wait for manual approval
-        uses: trstringer/manual-approval@v1.9.1
-        with:
-          secret: ${{ secrets.GITHUB_TOKEN }}
-          approvers: cmartinezaraujo
-          minimum-approvals: 1
-          issue-title: "Deployment Approval for ${{ inputs.account }} in ${{ inputs.region }}"
-          issue-body: |
-            A deployment is pending approval for the following:
-            - Account: ${{ inputs.account }}
-            - Region: ${{ inputs.region }}
 
       - name: Deploy Application
         run: |

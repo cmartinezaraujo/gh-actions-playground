@@ -1,23 +1,24 @@
 name: Deployment Workflow
 
 on:
-    push:
-        branches:
-        - main
-    workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 permissions:
   issues: write
+
 jobs:
   version-matrix:
     strategy:
-      # super important if you want to see all results, even if one fails
-      # fail-fast is true by default
       fail-fast: false
       matrix:
         account: [dev, prod]
-        region: [us-east-2]
-    uses: ./.github/workflows/common-workflow.yml # calls the one above ^
+        region: [us-east-2, us-west-2]
+
+    uses: ./.github/workflows/common-workflow.yml
     with:
       account: ${{ matrix.account }}
-      region: ${{ matrix.region}}
+      region: ${{ matrix.region }}
     secrets: inherit
