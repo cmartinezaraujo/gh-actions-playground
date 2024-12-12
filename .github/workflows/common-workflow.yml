@@ -22,9 +22,10 @@ jobs:
 
     steps:
       - name: Check Approval for Deployment
+        id: check
         run: |
           echo "Checking approval for Account: ${{ inputs.account }} and Region: ${{ inputs.region }}"
-          if [[ "${{ vars.APPROVED_DEPLOYMENTS }}" == *"${{ inputs.account }}:${{ inputs.region }}"* ]]; then
+          if echo "${{ vars.APPROVED_DEPLOYMENTS }}" | grep -q "${{ inputs.account }}:${{ inputs.region }}"; then
             echo "approval_status=approved" >> $GITHUB_OUTPUT
           else
             echo "approval_status=denied" >> $GITHUB_OUTPUT
@@ -44,5 +45,5 @@ jobs:
 
       - name: Deploy Application
         run: |
-          echo "Job status:  ${{ needs.check-approval.outputs.approval_status == 'approved' }}"
+          echo "Job status: ${{ needs.check-approval.outputs.approval_status == 'approved' }}"
           echo "Deploying to Account: ${{ inputs.account }} in Region: ${{ inputs.region }}"
