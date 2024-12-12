@@ -36,7 +36,7 @@ jobs:
     needs: parse-deployment-variable
     runs-on: ubuntu-latest
     environment:
-      name: Deployment Approval
+      name: qa
     steps:
       - name: Approval Required
         run: echo "Waiting for environment approval to proceed with deployment matrix."
