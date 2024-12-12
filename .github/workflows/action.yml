@@ -32,8 +32,17 @@ jobs:
         run: |
           echo "Matrix JSON: ${{ steps.parse.outputs.matrix }}"
 
-  deployment-matrix:
+  approval-job:
     needs: parse-deployment-variable
+    runs-on: ubuntu-latest
+    environment:
+      name: Deployment Approval
+    steps:
+      - name: Approval Required
+        run: echo "Waiting for environment approval to proceed with deployment matrix."
+        
+  deployment-matrix:
+    needs: [parse-deployment-variable, approval-job]
     strategy:
       fail-fast: false
       matrix:
