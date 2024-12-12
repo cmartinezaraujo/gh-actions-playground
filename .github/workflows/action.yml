@@ -30,28 +30,18 @@ jobs:
 
       - name: Debug Outputs
         run: |
-          echo "Matrix JSON : ${{ steps.parse.outputs.matrix }}"
+          echo "Matrix JSON: ${{ steps.parse.outputs.matrix }}"
 
   deployment-matrix:
     needs: parse-deployment-variable
-    runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include: ${{ fromJson(needs.parse-deployment-variable.outputs.matrix) }}
       max-parallel: 1
 
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: List Workflow Files
-        run: ls -l
-      - name: Echo Matrix Details
-        run: |
-          echo "Deploying to Account: ${{ matrix.account }}, Region: ${{ matrix.region }}"
-
-      - name: Call Common Workflow
-        uses: ./.github/workflows/common-workflow.yml
-        with:
-          account: ${{ matrix.account }}
-          region: ${{ matrix.region }}
+    uses: ./.github/workflows/common-workflow.yml
+    with:
+      account: ${{ matrix.account }}
+      region: ${{ matrix.region }}
+    secrets: inherit
