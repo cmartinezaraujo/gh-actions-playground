@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: List Workflow Files
+        run: ls
       - name: Echo Matrix Details
         run: |
           echo "Deploying to Account: ${{ matrix.account }}, Region: ${{ matrix.region }}"
