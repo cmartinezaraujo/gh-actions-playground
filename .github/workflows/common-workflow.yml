@@ -47,6 +47,8 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     needs: check-approval
+    environment:
+      name: dev
     if: ${{ needs.check-approval.outputs.check == 'approved' }}
 
     steps:
