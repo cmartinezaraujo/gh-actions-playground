@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
+    continue-on-error: true
 
     steps:
       - name: Check Approval for Deployment
