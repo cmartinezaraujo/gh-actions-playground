@@ -47,7 +47,7 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     needs: check-approval
-    if: ${{ needs.check-approval.outputs.approval_status == 'approved' }}
+    if: ${{ needs.check-approval.outputs.check == 'approved' }}
 
     steps:
       - name: Debug Outputs
