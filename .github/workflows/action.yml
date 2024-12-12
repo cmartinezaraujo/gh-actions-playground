@@ -14,8 +14,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        account: [dev, prod]
+        account: [dev, prod, qa, stage]
         region: [us-east-2, us-west-2]
+      max-parallel: 1
 
     uses: ./.github/workflows/common-workflow.yml
     with:

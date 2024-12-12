@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-approval
     environment:
-      name: prod
+      name: ${{ inputs.account }}
     if: ${{ needs.check-approval.outputs.check == 'approved' }}
 
     steps:
