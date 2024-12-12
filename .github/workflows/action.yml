@@ -30,7 +30,7 @@ jobs:
 
       - name: Debug Outputs
         run: |
-          echo "Matrix JSON: ${{ steps.parse.outputs.matrix }}"
+          echo "Matrix JSON : ${{ steps.parse.outputs.matrix }}"
 
   deployment-matrix:
     needs: parse-deployment-variable
