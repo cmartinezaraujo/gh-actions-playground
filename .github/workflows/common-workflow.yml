@@ -33,6 +33,7 @@ jobs:
           else
             echo "approval_status=denied" >> $GITHUB_OUTPUT
             exit 1
+          fi # Properly close the if statement
 
       - name: Step 1 Output
         id: step1
@@ -49,7 +50,8 @@ jobs:
       name: dev
 
     steps:
-      - env:
+      - name: Debug Outputs
+        env:
           OUTPUT1: ${{ needs.check-approval.outputs.output1 }}
           OUTPUT2: ${{ needs.check-approval.outputs.output2 }}
         run: echo "$OUTPUT1 $OUTPUT2"
