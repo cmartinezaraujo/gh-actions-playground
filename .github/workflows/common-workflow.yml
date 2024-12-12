@@ -47,8 +47,7 @@ jobs:
     needs: check-approval
 
     steps:
-      - name: Debug Outputs
-        env:
+      - env:
           OUTPUT1: ${{ needs.check-approval.outputs.output1 }}
           OUTPUT2: ${{ needs.check-approval.outputs.output2 }}
         run: echo "$OUTPUT1 $OUTPUT2"
