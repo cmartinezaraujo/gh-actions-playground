@@ -43,4 +43,5 @@ jobs:
 
       - name: Deploy Application
         run: |
+          echo "Job status: ${{ needs.check-approval.result == 'success' }}"
           echo "Deploying to Account: ${{ inputs.account }} in Region: ${{ inputs.region }}"
