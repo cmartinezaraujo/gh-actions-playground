@@ -36,7 +36,7 @@ jobs:
     needs: parse-deployment-variable
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include: ${{ fromJson(needs.parse-deployment-variable.outputs.matrix) }}
       max-parallel: 1
@@ -45,7 +45,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
       - name: List Workflow Files
-        run: ls
+        run: ls -l
       - name: Echo Matrix Details
         run: |
           echo "Deploying to Account: ${{ matrix.account }}, Region: ${{ matrix.region }}"
