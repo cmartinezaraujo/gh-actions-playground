@@ -24,8 +24,8 @@ jobs:
           APPROVED="${{ vars.APPROVED_DEPLOYMENTS }}"
           echo "Approved Deployments: $APPROVED"
 
-          # Generate matrix JSON
-          MATRIX=$(echo "$APPROVED" | awk -F: '{ printf "{\"account\":\"%s\",\"region\":\"%s\"},", $1, $2 }' | sed 's/,$//')
+          # Split and construct JSON matrix
+          MATRIX=$(echo "$APPROVED" | tr ',' '\n' | awk -F: '{ printf "{\"account\":\"%s\",\"region\":\"%s\"},", $1, $2 }' | sed 's/,$//')
           echo "matrix=[$MATRIX]" >> $GITHUB_OUTPUT
 
       - name: Debug Outputs
