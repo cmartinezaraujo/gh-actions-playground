@@ -36,8 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-approval
     if: ${{ needs.check-approval.outputs.approval_status == 'approved' }}
-    environment:
-      name: prod
 
     steps:
       - name: Plan TF
