@@ -1,17 +1,40 @@
-name: Hello World Action
+name: Deployment Workflow
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  say-hello:
+  start-deployment:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        account: [dev, prod]
+        region: [us-east-2]
+
+    outputs:
+      account: ${{ steps.set-matrix-values.outputs.account }}
+      region: ${{ steps.set-matrix-values.outputs.region }}
 
     steps:
-      - name: Check out the code
-        uses: actions/checkout@v4
+      - name: Echo Start Deployment
+        run: |
+          echo "Starting deployment for Account: ${{ matrix.account }}"
+          echo "Region: ${{ matrix.region }}"
 
-      - name: Echo Hello World
-        run: echo "Hello, World!"
+      - name: Set Matrix Values
+        id: set-matrix-values
+        run: |
+          echo "::set-output name=account::${{ matrix.account }}"
+          echo "::set-output name=region::${{ matrix.region }}"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: start-deployment
+    environment:
+      name: ${{ needs.start-deployment.outputs.account }}
+
+    steps:
+      - name: Deploy Application
+        run: |
+          echo "Deploying to Account: ${{ needs.start-deployment.outputs.account }}"
+          echo "Region: ${{ needs.start-deployment.outputs.region }}"
